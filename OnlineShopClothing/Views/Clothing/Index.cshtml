@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-4">
+    <div class="row p-3">
+        <div class="col-6">
+            <h2 class="text-primary">List of Clothing</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary" asp-action="CreateUpdate" asp-controller="Clothing"><i class="bi bi-plus-circle"></i>&nbsp;Create new Clothing </a>
+        </div>
+    </div>
+</div>
+<table id="MyTable" class="table table-border table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Brand
+            </th>
+            <th>
+                Country
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Style
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+</table>
+@section scripts{
+    <script src="~/js/Clothing.js"></script>
+}

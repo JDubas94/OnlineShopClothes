@@ -1,0 +1,101 @@
+﻿@model OnlineShopClothing.ViewModels.ClothingVM
+<form method="post" asp-action="CreateUpdate" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Clothing.Id" />
+    <input type="hidden" asp-for="Clothing.ImageUrl" />
+    <img src="@Model.Clothing.ImageUrl" width="100" height="100" />
+    <div class="border p-3 mt-4">
+        <div class="row pb-3">
+            <h2 class="text-primary">@((Model.Clothing==null || Model.Clothing.Id==0)?"Create" : "Update")Clothing</h2>
+            <hr />
+        </div>
+        <div asp-validation-summary=All></div>
+
+        <div class="row mb-3">
+            <label asp-for="Clothing.Name"></label>
+            <input asp-for="Clothing.Name" class="form-control" />
+            <span asp-validation-for="Clothing.Name" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Clothing.Description"></label>
+            <textarea asp-for="Clothing.Description" class="form-control"></textarea>
+            <span asp-validation-for="Clothing.Description" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Clothing.Price"></label>
+            <input asp-for="Clothing.Price" class="form-control" />
+            <span asp-validation-for="Clothing.Price" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Clothing.ImageUrl"></label>
+            <input type="file" id="ImageFile" name="file" class="form-select" />
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Clothing.Category"></label>
+            <select asp-for="Clothing.CategoryId" asp-items="@Model.Categories" class="form-control">
+                <option selected disabled>--Select Category--</option>
+            </select>
+            <span asp-validation-for="Clothing.CategoryId" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Clothing.BrandId"></label>
+            <select asp-for="Clothing.BrandId" asp-items="@Model.Brands" class="form-control">
+                <option selected disabled>--Select Brand--</option>
+            </select>
+            <span asp-validation-for="Clothing.BrandId" class="text-danger"></span>
+        </div>
+            <div class="row mb-3">
+            <label asp-for="Clothing.CountryId"></label>
+            <select asp-for="Clothing.CountryId" asp-items="@Model.Countries" class="form-control">
+                <option selected disabled>--Select Country--</option>
+            </select>
+            <span asp-validation-for="Clothing.CountryId" class="text-danger"></span>
+        </div>
+            <div class="row mb-3">
+                <label asp-for="Clothing.Color"></label>
+                <input asp-for="Clothing.Color" class="form-control" />
+                <span asp-validation-for="Clothing.Color" class="text-danger"></span>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="Clothing.Style"></label>
+                <input asp-for="Clothing.Style" class="form-control" />
+                <span asp-validation-for="Clothing.Style" class="text-danger"></span>
+            </div>
+            @if (Model.Clothing == null || Model.Clothing.Id == 0)
+            {
+                <button class=" btn btn-primary" onclick="return ValidateEmpty()" type="submit">Create</button>
+            }
+            else
+            {
+                <button class=" btn btn-primary" type="submit">Update</button>
+            }
+        </div>
+        <a asp-action="Index" asp-controller="Clothing">Back To List</a>
+</form>
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'allycheker advcode casechange export formatpainter linkcheker',
+            toolbar: 'allychec addcoment showcomments casechange checklist code export formatpainter linkcheker',
+            toolbar_mode: 'floating',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name'
+        });
+        function ValidateEmpty() {
+            if (document.getElementById("ImageFile").value == "") {
+                Swal.fire
+                    ({
+                        icon: 'Error',
+                        title: 'Oops...',
+                        text: 'Upload Image'
+                    });
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+}
