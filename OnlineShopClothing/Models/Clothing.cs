@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineShopClothing.Models
 {
@@ -25,14 +27,13 @@ namespace OnlineShopClothing.Models
         [ValidateNever]
         public Category Category { get; set; }
 
-        //[Required]
-        //[ValidateNever]
-        [Display(Name = "Size")]
-        public int SizeId { get; set; }
-        // public List<int> SizeIds { get; set; }
-
+        [Required]
         [ValidateNever]
-        public List<Size> Sizes { get; set; }
+        public List<ClothingSize> ClothingSizes { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public string JoinedClothingSizes { get; set; }
 
         [Required]
         [Display(Name = "Brand")]
@@ -53,5 +54,6 @@ namespace OnlineShopClothing.Models
 
         [Required]
         public string Style { get; set; }
+
     }
 }

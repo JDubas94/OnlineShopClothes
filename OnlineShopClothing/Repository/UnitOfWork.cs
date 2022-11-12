@@ -15,7 +15,10 @@ namespace OnlineShopClothing.Repository
 
         public IDropListRepository<Country> Country { get; private set; }
 
-        public IDropListRepository<Size> Size { get; private set; }
+        public ICheckBoxRepository<Size> Size { get; private set; }
+
+        public IClothingSizeRepository<ClothingSize> ClothingSize { get; private set; }
+
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -30,6 +33,8 @@ namespace OnlineShopClothing.Repository
             Country = new CountryRepository(context);   
 
             Size = new SizeRepository(context);
+
+            ClothingSize = new ClothingSizeRepository(context);
         }
 
         public void Save()

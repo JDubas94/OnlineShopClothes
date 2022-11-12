@@ -12,7 +12,10 @@ namespace OnlineShopClothing.Repository
 
         IDropListRepository<Country> Country { get; }
 
-        IDropListRepository<Size> Size { get; }
+        ICheckBoxRepository<Size> Size { get; }
+
+        IClothingSizeRepository<ClothingSize> ClothingSize { get; }
+
         void Save();
     }
 }

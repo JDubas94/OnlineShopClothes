@@ -36,6 +36,14 @@
             </select>
             <span asp-validation-for="Clothing.CategoryId" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            @for (int i = 0; i < Model.Sizes.Count(); i++)
+            {
+                <input type="hidden" asp-for="Sizes[i].Value" />
+                    <input asp-for="Sizes[i].Selected" />
+                    @Model.Sizes[i].Text
+            }
+        </div>
         <div class="row mb-3">
             <label asp-for="Clothing.BrandId"></label>
             <select asp-for="Clothing.BrandId" asp-items="@Model.Brands" class="form-control">
@@ -43,33 +51,33 @@
             </select>
             <span asp-validation-for="Clothing.BrandId" class="text-danger"></span>
         </div>
-            <div class="row mb-3">
+        <div class="row mb-3">
             <label asp-for="Clothing.CountryId"></label>
             <select asp-for="Clothing.CountryId" asp-items="@Model.Countries" class="form-control">
                 <option selected disabled>--Select Country--</option>
             </select>
             <span asp-validation-for="Clothing.CountryId" class="text-danger"></span>
         </div>
-            <div class="row mb-3">
-                <label asp-for="Clothing.Color"></label>
-                <input asp-for="Clothing.Color" class="form-control" />
-                <span asp-validation-for="Clothing.Color" class="text-danger"></span>
-            </div>
-            <div class="row mb-3">
-                <label asp-for="Clothing.Style"></label>
-                <input asp-for="Clothing.Style" class="form-control" />
-                <span asp-validation-for="Clothing.Style" class="text-danger"></span>
-            </div>
-            @if (Model.Clothing == null || Model.Clothing.Id == 0)
-            {
-                <button class=" btn btn-primary" onclick="return ValidateEmpty()" type="submit">Create</button>
-            }
-            else
-            {
-                <button class=" btn btn-primary" type="submit">Update</button>
-            }
+        <div class="row mb-3">
+            <label asp-for="Clothing.Color"></label>
+            <input asp-for="Clothing.Color" class="form-control" />
+            <span asp-validation-for="Clothing.Color" class="text-danger"></span>
         </div>
-        <a asp-action="Index" asp-controller="Clothing">Back To List</a>
+        <div class="row mb-3">
+            <label asp-for="Clothing.Style"></label>
+            <input asp-for="Clothing.Style" class="form-control" />
+            <span asp-validation-for="Clothing.Style" class="text-danger"></span>
+        </div>
+        @if (Model.Clothing == null || Model.Clothing.Id == 0)
+        {
+            <button class=" btn btn-primary" onclick="return ValidateEmpty()" type="submit">Create</button>
+        }
+        else
+        {
+            <button class=" btn btn-primary" type="submit">Update</button>
+        }
+    </div>
+    <a asp-action="Index" asp-controller="Clothing">Back To List</a>
 </form>
 @section scripts{
     @{

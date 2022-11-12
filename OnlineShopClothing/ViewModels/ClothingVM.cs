@@ -17,7 +17,10 @@ namespace OnlineShopClothing.ViewModels
         public IEnumerable<SelectListItem> Categories { get; set; }
 
         [ValidateNever]
-        public IEnumerable<SelectListItem> Sizes { get; set; }
+        public IList<SelectListItem> Sizes { get; set; }
+
+        [ValidateNever]
+        public IEnumerable<ClothingSize> ClothingSizes { get; set; }
 
         [ValidateNever]
         public IEnumerable<SelectListItem> Brands { get; set; }

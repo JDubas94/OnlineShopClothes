@@ -1,5 +1,6 @@
 ﻿var dtable;
 $(document).ready(function () {
+    alert("1");
     dtable = $('#MyTable').DataTable({
         "ajax": { "url": "/Clothing/AllClothing" },
         "columns": [
@@ -7,7 +8,7 @@ $(document).ready(function () {
             { "data": 'description' },
             { "data": "price" },
             { "data": "category.name" },
-            { "data": "sizeId" },
+            { "data": "joinedClothingSizes" },
             { "data": "brand.name" },
             { "data": "country.name" },
             { "data": "color" },
@@ -22,6 +23,8 @@ $(document).ready(function () {
             }
         ]
     });
+    alert("2");
+
 });
 function RemoveClothing(url) {
     Swal.fire({

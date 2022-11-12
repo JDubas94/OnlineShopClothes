@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShopClothing.Data;
 
@@ -11,9 +12,10 @@ using OnlineShopClothing.Data;
 namespace OnlineShopClothing.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221102145949__UpdateDatabase")]
+    partial class _UpdateDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,29 +310,6 @@ namespace OnlineShopClothing.Migrations
                     b.ToTable("Сlothing");
                 });
 
-            modelBuilder.Entity("OnlineShopClothing.Models.ClothingSize", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClothingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SizeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClothingId");
-
-                    b.HasIndex("SizeId");
-
-                    b.ToTable("ClothingSizes");
-                });
-
             modelBuilder.Entity("OnlineShopClothing.Models.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -441,35 +420,6 @@ namespace OnlineShopClothing.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("OnlineShopClothing.Models.ClothingSize", b =>
-                {
-                    b.HasOne("OnlineShopClothing.Models.Clothing", "Clothing")
-                        .WithMany("Clothing_Sizes")
-                        .HasForeignKey("ClothingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineShopClothing.Models.Size", "Size")
-                        .WithMany("ClothingSizes")
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Clothing");
-
-                    b.Navigation("Size");
-                });
-
-            modelBuilder.Entity("OnlineShopClothing.Models.Clothing", b =>
-                {
-                    b.Navigation("Clothing_Sizes");
-                });
-
-            modelBuilder.Entity("OnlineShopClothing.Models.Size", b =>
-                {
-                    b.Navigation("ClothingSizes");
                 });
 #pragma warning restore 612, 618
         }

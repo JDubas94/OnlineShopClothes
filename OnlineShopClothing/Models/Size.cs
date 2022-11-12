@@ -9,5 +9,9 @@ namespace OnlineShopClothing.Models
 
         [Required]
         public string Name { get; set; }
+
+
+        public List<ClothingSize> ClothingSizes { get; set; }
+
     }
 }

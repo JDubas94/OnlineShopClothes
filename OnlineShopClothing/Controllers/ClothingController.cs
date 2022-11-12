@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using OnlineShopClothing.Models;
 using OnlineShopClothing.Repository;
 using OnlineShopClothing.ViewModels;
 
@@ -20,6 +21,14 @@ namespace OnlineShopClothing.Controllers
         public IActionResult AllClothing()
         {
             var clothing = _unitOfWork.Clothing.GetAll(includeProperties: "Category,Brand,Country");
+            var sizes  =_unitOfWork.Size.GetItems();
+            var clothingSizes = _unitOfWork.ClothingSize.GetItems();
+
+            foreach(var item in clothing)
+            {
+                item.JoinedClothingSizes = String.Join(',', (clothingSizes.Where(cs => cs.ClothingId == item.Id).Select(cs => sizes.First(s => s.Value == cs.SizeId.ToString()).Text)));
+            }
+
             return Json(new { data = clothing });
         }
 
@@ -31,14 +40,21 @@ namespace OnlineShopClothing.Controllers
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
+            var clothingSizes = _unitOfWork.ClothingSize.GetItemsByClothingId(id ?? 0).Select(c => c.SizeId.ToString()).ToList();
+
             ClothingVM vm = new()
             {
                 Clothing = new(),
                 Categories = _unitOfWork.Category.GetItems(),
                 Brands = _unitOfWork.Brand.GetItems(),
                 Countries = _unitOfWork.Country.GetItems(),
-                Sizes = _unitOfWork.Size.GetItems(),
+                Sizes = _unitOfWork.Size.GetItems().ToList(),
             };
+
+            foreach (var item in vm.Sizes)
+            {
+                item.Selected = clothingSizes.Contains(item.Value);
+            }
 
             if (id == null || id == 0)
             {
@@ -64,6 +80,7 @@ namespace OnlineShopClothing.Controllers
 
         public IActionResult CreateUpdate(ClothingVM vm, IFormFile? file)
         {
+
             if (ModelState.IsValid)
             {
                 if (file != null)
@@ -88,10 +105,13 @@ namespace OnlineShopClothing.Controllers
 
                     vm.Clothing.ImageUrl = @"\ClothingImage\" + fileName;
                 }
+
                 if (vm.Clothing.Id == 0)
                 {
                     // TODO: remove SizeId when are add SizeCheckboxList
-                    vm.Clothing.SizeId = 1;
+                    //_unitOfWork.Size.GetItems();
+
+
                     _unitOfWork.Clothing.Add(vm.Clothing);
                     TempData["success"] = "Product Created Done!";
                 }
@@ -103,9 +123,31 @@ namespace OnlineShopClothing.Controllers
 
                 _unitOfWork.Save();
 
+                var selectedSizesIds = vm.Sizes.Where(x => x.Selected).Select(y => y.Value).ToList();
+                var clothingSizes = _unitOfWork.ClothingSize.GetItemsByClothingId(vm.Clothing.Id).Select(c => c.SizeId.ToString()).ToList();
+                
+                // Добавление новых записей
+                foreach (var sizeId in selectedSizesIds)
+                {
+                    int.TryParse(sizeId, out int sizeIdInt);
+                    if (clothingSizes != null && !clothingSizes.Contains(sizeId))
+                        _unitOfWork.ClothingSize.Add(new ClothingSize() { ClothingId = vm.Clothing.Id, SizeId = sizeIdInt });
+
+                }
+                //Удаление существующих
+                foreach (var sizeId in clothingSizes)
+                {
+                    int.TryParse(sizeId, out int sizeIdInt);
+                    if (!selectedSizesIds.Contains(sizeId.ToString()))
+                        _unitOfWork.ClothingSize.Delete(sizeIdInt);
+                }
+
+                _unitOfWork.Save();
+
                 return RedirectToAction("Index");
             }
 
+            // If ModelState is not valid we add all lists which are null 
             vm.Categories = _unitOfWork.Category.GetAll().Select(x => new SelectListItem()
             {
                 Text = x.Name,
@@ -113,7 +155,7 @@ namespace OnlineShopClothing.Controllers
             });
             vm.Brands = _unitOfWork.Brand.GetItems();
             vm.Countries = _unitOfWork.Country.GetItems();
-            vm.Sizes = _unitOfWork.Size.GetItems();
+            vm.Sizes = _unitOfWork.Size.GetItems().ToList();
 
             return View(vm);
         }
